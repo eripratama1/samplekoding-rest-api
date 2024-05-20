@@ -96,7 +96,7 @@ class ArticleController extends Controller
 
         /** Jika data article berdasarkan id ada pada tabel article
          * tampilkan response berisikan data title,content & publish_date
-        */
+         */
         if ($article) {
             return response()->json([
                 'status' => Response::HTTP_OK,
@@ -112,6 +112,51 @@ class ArticleController extends Controller
                 'status' => Response::HTTP_NOT_FOUND,
                 'message' => 'article not found'
             ], Response::HTTP_NOT_FOUND);
+        }
+    }
+
+    public function update(Request $request, $id)
+    {
+        $article = Article::find($id);
+
+        if (!$article) {
+            return response()->json([
+                'status' => Response::HTTP_NOT_FOUND,
+                'message' => 'Article not found'
+            ], Response::HTTP_NOT_FOUND);
+        }
+
+        $validator = Validator::make($request->all(), [
+            'title' => 'required',
+            'content' => 'required',
+            'publish_date' => 'required'
+        ]);
+
+        /** Jika ada data yang tidak valid return error response berikut */
+        if ($validator->fails()) {
+            return response()->json($validator->errors());
+        }
+
+        try {
+            /** Jika data valid lakukan proses update data */
+            $article->update([
+                'title' => $request->title,
+                'content' => $request->content,
+                'publish_date' => Carbon::create($request->publish_date)->toDateString(),
+            ]);
+
+            return response()->json([
+                'status' => Response::HTTP_OK,
+                'message' => 'Data updated'
+            ], Response::HTTP_OK);
+        } catch (Exception $e) {
+        /** Jika proses update data gagal return response JSON berikut */
+            Log::error('Error update data :' .  $e->getMessage());
+
+            return response()->json([
+                'status' => Response::HTTP_INTERNAL_SERVER_ERROR,
+                'message' => 'Failed stored data to db'
+            ], Response::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
 }
