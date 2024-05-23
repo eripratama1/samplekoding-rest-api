@@ -150,12 +150,37 @@ class ArticleController extends Controller
                 'message' => 'Data updated'
             ], Response::HTTP_OK);
         } catch (Exception $e) {
-        /** Jika proses update data gagal return response JSON berikut */
+            /** Jika proses update data gagal return response JSON berikut */
             Log::error('Error update data :' .  $e->getMessage());
 
             return response()->json([
                 'status' => Response::HTTP_INTERNAL_SERVER_ERROR,
                 'message' => 'Failed stored data to db'
+            ], Response::HTTP_INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    public function destroy($id)
+    {
+        /** Cari data berdasarkan data id yang di dapatkan */
+        $article = Article::find($id);
+
+        try {
+            /** Lakukan proses delete data dan return response
+             *  Dalam bentuk JSON
+             */
+            $article->delete();
+            return response()->json([
+                'status' => Response::HTTP_OK,
+                'message' => 'Article deleted'
+            ], Response::HTTP_OK);
+        } catch (Exception $e) {
+            Log::error('Error update data :' .  $e->getMessage());
+
+            /** Jika gagal tampilkan response error berikut */
+            return response()->json([
+                'status' => Response::HTTP_INTERNAL_SERVER_ERROR,
+                'message' => 'Failed delete data'
             ], Response::HTTP_INTERNAL_SERVER_ERROR);
         }
     }

@@ -13,4 +13,5 @@ Route::prefix('v1')->group(function(){
     Route::post('store-article',[App\Http\Controllers\API\v1\ArticleController::class,'store']);
     Route::get('read-article/{id}',[App\Http\Controllers\API\v1\ArticleController::class,'show']);
     Route::put('update-article/{id}',[App\Http\Controllers\API\v1\ArticleController::class,'update']);
+    Route::delete('delete-article/{id}',[App\Http\Controllers\API\v1\ArticleController::class,'destroy']);
 });
