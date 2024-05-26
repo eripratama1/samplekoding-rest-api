@@ -14,4 +14,7 @@ Route::prefix('v1')->group(function(){
     Route::get('read-article/{id}',[App\Http\Controllers\API\v1\ArticleController::class,'show']);
     Route::put('update-article/{id}',[App\Http\Controllers\API\v1\ArticleController::class,'update']);
     Route::delete('delete-article/{id}',[App\Http\Controllers\API\v1\ArticleController::class,'destroy']);
+
+    /** Route baru untuk pencarian data */
+    Route::get('article/search',[App\Http\Controllers\API\v1\ArticleController::class,'index']);
 });

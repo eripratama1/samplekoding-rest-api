@@ -14,13 +14,23 @@ use Illuminate\Support\Facades\Validator;
 
 class ArticleController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
         /**
          * Fetch data dari tabel artikel berdasarkan data
          * publish_date terbaru
+         * Kita juga menambahkan fungsi pencarian data article
+         * berdasarkan titlenya dan juga fungsi paginate
+         * Dimana kita membatasi jumlah data yang tampil per halaman/response
          */
-        $articles = Article::latest('publish_date')->get();
+        $query = Article::query()->latest('publish_date');
+        $keyword = $request->input('title');
+
+        if ($keyword) {
+            $query->where('title','like',"%{$keyword}%");
+        }
+
+        $articles = $query->paginate(2);
 
         /** Jika data kosong tampilkan hasil dan pesan dibawah */
         if ($articles->isEmpty()) {
