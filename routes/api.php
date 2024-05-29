@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\API\v2\ArticleController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -17,4 +18,9 @@ Route::prefix('v1')->group(function(){
 
     /** Route baru untuk pencarian data */
     Route::get('article/search',[App\Http\Controllers\API\v1\ArticleController::class,'index']);
+});
+
+Route::prefix('v2')->group(function(){
+    Route::get('list-articles',[App\Http\Controllers\API\v2\ArticleController::class,'index']);
+    Route::resource('article',ArticleController::class);
 });
