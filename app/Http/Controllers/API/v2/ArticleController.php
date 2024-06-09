@@ -50,12 +50,13 @@ class ArticleController extends Controller
         /**
          * Cek bearer token apakah ada atau tidak
          */
-        $token = $request->bearerToken();
-        if (!$token) {
-            return response()->json([
-                'message' => 'Token not exists, please login first'
-            ], Response::HTTP_UNAUTHORIZED);
-        }
+        $this->unauthenticated($request);
+        // $token = $request->bearerToken();
+        // if (!$token) {
+        //     return response()->json([
+        //         'message' => 'Token not exists, please login first'
+        //     ], Response::HTTP_UNAUTHORIZED);
+        // }
 
         /**
          * Melakukan validasi menggunakan validator
@@ -127,12 +128,13 @@ class ArticleController extends Controller
 
     public function update(Request $request, $id)
     {
-        $token = $request->bearerToken();
-        if (!$token) {
-            return response()->json([
-                'message' => 'Token not exists update failed, please login first'
-            ], Response::HTTP_UNAUTHORIZED);
-        }
+        $this->unauthenticated($request);
+        // $token = $request->bearerToken();
+        // if (!$token) {
+        //     return response()->json([
+        //         'message' => 'Token not exists update failed, please login first'
+        //     ], Response::HTTP_UNAUTHORIZED);
+        // }
 
         $article = Article::find($id);
 
@@ -179,12 +181,13 @@ class ArticleController extends Controller
 
     public function destroy(Request $request, $id)
     {
-        $token = $request->bearerToken();
-        if (!$token) {
-            return response()->json([
-                'message' => 'Token not exists, please login first'
-            ], Response::HTTP_UNAUTHORIZED);
-        }
+        $this->unauthenticated($request);
+        // $token = $request->bearerToken();
+        // if (!$token) {
+        //     return response()->json([
+        //         'message' => 'Token not exists, please login first'
+        //     ], Response::HTTP_UNAUTHORIZED);
+        // }
 
         /** Cari data berdasarkan data id yang di dapatkan */
         $article = Article::find($id);
@@ -206,6 +209,19 @@ class ArticleController extends Controller
                 'status' => Response::HTTP_INTERNAL_SERVER_ERROR,
                 'message' => 'Failed delete data'
             ], Response::HTTP_INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    /** Method yang akan dijalankan ketika user belum terautentikasi atau token
+     *  tidak ada
+     */
+    public function unauthenticated(Request $request)
+    {
+        $token = $request->bearerToken();
+        if (!$token) {
+            return response()->json([
+                'message' => 'Token not exists, please login first'
+            ], Response::HTTP_UNAUTHORIZED);
         }
     }
 }

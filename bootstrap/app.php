@@ -12,7 +12,8 @@ return Application::configure(basePath: dirname(__DIR__))
         health: '/up',
     )
     ->withMiddleware(function (Middleware $middleware) {
-        //
+        /** middleware yang akan mengarahkan user yang belum terautentikasi */
+        $middleware->redirectGuestsTo(fn () => route('guest'));
     })
     ->withExceptions(function (Exceptions $exceptions) {
         //

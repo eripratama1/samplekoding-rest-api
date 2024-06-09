@@ -28,5 +28,11 @@ Route::prefix('v1')->group(function () {
 
 Route::prefix('v2')->group(function () {
     Route::get('list-articles', [App\Http\Controllers\API\v2\ArticleController::class, 'index']);
-    Route::resource('article', ArticleController::class);
+
+    Route::middleware('auth:sanctum')->group(function(){
+        Route::resource('article', ArticleController::class);
+    });
+
+    /** jika user belum terautentikasi arahkan user ke route ini */
+    Route::get('unauthenticated',[App\Http\Controllers\API\v2\ArticleController::class,'unauthenticated'])->name('guest');
 });
